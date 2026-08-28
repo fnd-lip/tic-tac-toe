@@ -2,25 +2,33 @@ name: CI/CD - Tic Tac Toe
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'feature/**'
+
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
     name: CI - Testes automatizados
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Instalar dependencias
-        run: pip install -r requirements.txt -r requirements-test.txt
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
 
-      - name: Rodar Testes
-        run: pytest -m unittest test_app.py
+      - name: Rodar testes
+        run: pytest -m unittest tests
